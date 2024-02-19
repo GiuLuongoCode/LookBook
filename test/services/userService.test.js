@@ -1,4 +1,4 @@
-const UserService = require("../../src/service/userService");
+const UserService = require("../../src/services/userService");
 const mongoose = require("mongoose");
 require("dotenv").config();
 

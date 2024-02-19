@@ -1,4 +1,4 @@
-const UserService = require("../service/userService");
+const UserService = require("../services/userService");
 module.exports = class UserController {
   /**
    *  Creates a new user using the provided request and response objects.
