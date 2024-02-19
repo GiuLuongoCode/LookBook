@@ -1,7 +1,7 @@
-const UserController = require("../../src/controller/userController");
-const UserService = require("../../src/service/userService");
+const UserController = require("../../src/controllers/userController");
+const UserService = require("../../src/services/userService");
 
-jest.mock("../../src/service/userService");
+jest.mock("../../src/services/userService");
 
 describe("UserController", () => {
   beforeEach(() => {
