@@ -25,7 +25,7 @@ module.exports = class UserService {
    */
   static async updateUser(data) {
     const response = await User.findOneAndUpdate(
-      { email: data.email, name: data.name, surname: data.surname },
+      { _id: data._id ,email: data.email, name: data.name, surname: data.surname },
       data,
       {
         new: true,
