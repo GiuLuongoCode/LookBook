@@ -36,13 +36,14 @@ describe("ProductController", () => {
     ProductService.createProduct.mockResolvedValueOnce(mockNewProduct);
     await ProductController.createProduct(req, res);
     expect(ProductService.createProduct).toHaveBeenCalledWith(
-      "testName",
-      [
+      {name:"testName",
+      photos: [
         {
           url: "testUrl",
           description: "testDescription",
         }
       ]
+    }
     );
     expect(res.status).toHaveBeenCalledWith(201);
     expect(res.json).toHaveBeenCalledWith(mockNewProduct);
@@ -50,6 +51,9 @@ describe("ProductController", () => {
 
   test("Update Product", async () => {
     const req = {
+      params: {
+        id: "65d6457188d3faff2224a75e"
+      },
       body: {
         name: "testName",
         photos: [
@@ -65,6 +69,7 @@ describe("ProductController", () => {
       json: jest.fn(),
     };
     const mockUpdateProduct = {
+      id: "65d6457188d3faff2224a75e",
       name: "testName",
       photos: [
         {
@@ -78,13 +83,15 @@ describe("ProductController", () => {
     await ProductController.updateProduct(req, res);
 
     expect(ProductService.updateProduct).toHaveBeenCalledWith(
-      "testName",
-      [
+      {id: "65d6457188d3faff2224a75e",
+        name: "testName",
+      photos: [
         {
           url: "testUrl",
           description: "testDescriptionUpdated", 
         }
       ]
+    }
     );
     expect(res.status).toHaveBeenCalledWith(204);
     expect(res.json).toHaveBeenCalledWith(mockUpdateProduct);
@@ -93,15 +100,9 @@ describe("ProductController", () => {
 
   test("Delete Product", async () => {
     const req = {
-      body: {
-        name: "testName",
-        photos: [
-          {
-            url: "testUrl",
-            description: "testDescription",
-          },
-        ],
-      },
+      params: {
+        id: "65d6457188d3faff2224a75e"
+      }
     };
     const res = {
       status: jest.fn().mockReturnThis(),
@@ -116,18 +117,12 @@ describe("ProductController", () => {
         },
       ],
     };
-    ProductService.deleteProduct.mockResolvedValueOnce(mockDeleteProduct);
+    ProductService.deleteProduct.mockResolvedValueOnce("65d6457188d3faff2224a75e");
 
     await ProductController.deleteProduct(req, res);
 
     expect(ProductService.deleteProduct).toHaveBeenCalledWith(
-      "testName",
-      [
-        {
-          url: "testUrl",
-          description: "testDescription", 
-        }
-      ]
+      "65d6457188d3faff2224a75e"
     )
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith(mockDeleteProduct);

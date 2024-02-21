@@ -18,18 +18,16 @@ module.exports = class UserService {
   }
 
   /**
-   * Updates a user with the provided data.
+   * Updates a user with the provided id.
    *
    * @param {Object} data - The data to update the user with
    * @return {Object} A promise that resolves to the response from updating the user
    */
   static async updateUser(data) {
-    const response = await User.findOneAndUpdate(
-      { _id: data._id ,email: data.email, name: data.name, surname: data.surname },
-      data,
-      {
-        new: true,
-      }
+    const response = await User.findByIdAndUpdate(
+      {_id: data.id},
+                    { $set: data },
+                    { new: true }
     );
     return response;
   }
@@ -37,16 +35,11 @@ module.exports = class UserService {
   /**
    * Delete a user with the provided data.
    *
-   * @param {Object} data - The data to delete the user with
+   * @param {Object} userId - The id to delete the user with
    * @return {Promise} A promise that resolves to the response from deleting the user
    */
-  static async deleteUser(data) {
-    const deletedUser = {
-      email: data.email,
-      name: data.name,
-      surname: data.surname,
-    };
-    const response = await User.findOneAndDelete(deletedUser);
+  static async deleteUser(userId) {
+    const response = await User.findOneAndDelete(userId);
     return response;
   }
 };

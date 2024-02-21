@@ -10,7 +10,7 @@ module.exports = class UserController {
   static async createUser(req, res) {
     try {
       const { name, surname, email } = req.body;
-      const newUser = await UserService.createUser(name, surname, email);
+      const newUser = await UserService.createUser({name: name, surname: surname, email: email});
       return res.status(201).json(newUser);
     } catch (error) {
       return res.status(500).json({ error: error.message });
@@ -27,7 +27,8 @@ module.exports = class UserController {
   static async updateUser(req, res) {
     try {
       const { name, surname, email } = req.body;
-      const newUser = await UserService.updateUser(name, surname, email);
+      const userId = req.params.id;
+      const newUser = await UserService.updateUser({id: userId, name: name, surname: surname,email: email});
       return res.status(204).json(newUser);
     } catch (error) {
       return res.status(500).json({ error: error.message });
@@ -43,8 +44,8 @@ module.exports = class UserController {
    */
   static deleteUser(req, res) {
     try {
-      const { name, surname, email } = req.body;
-      const deletedUser = UserService.deleteUser(name, surname, email);
+      const userId = req.params.id;
+      const deletedUser = UserService.deleteUser(userId);
       return res.status(200).json(deletedUser);
     } catch (error) {
       return res.status(500).json({ error: error.message });

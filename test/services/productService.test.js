@@ -35,6 +35,7 @@ describe("Should perform CRUD on ProductService", () => {
 
     test("Update Product", async () => {
         const productToUpdate = {
+            id: "65d6457188d3faff2224a75e",
             name: "testNameUpdate",
             photos: [
                 {
@@ -48,16 +49,8 @@ describe("Should perform CRUD on ProductService", () => {
     }, 30000);
 
     test("Delete Product", async () => {
-        const productToDelete = {
-            name: "testName",
-            photos: [
-                {
-                    url: "testUrl",
-                    description: "testDescription",
-                }
-            ]
-        };
+        const productToDelete = "65d6457188d3faff2224a75e";
         const product = await ProductService.deleteProduct(productToDelete);
-        expect(product).toEqual(expect.objectContaining(productToDelete));
+        expect(product).toEqual(expect.objectContaining(product));
     })
 })

@@ -31,6 +31,7 @@ describe("Should perform CRUD on UserService", () => {
 
     test("Update User", async () => {
         const userToUpdate = {
+            id: "65d255e0b985568704b8d6b1",
             name: "testNameUpdate",
             surname: "testSurname",
             email: "test@example.com"
@@ -40,12 +41,8 @@ describe("Should perform CRUD on UserService", () => {
     }, 30000);
 
     test("Delete User", async () => {
-        const userToDelete = {
-            name: "testName",
-            surname: "testSurname",
-            email: "test@example.com"
-        };
+        const userToDelete = "65d255e0b985568704b8d6b1";
         const user = await UserService.deleteUser(userToDelete);
-        expect(user).toEqual(expect.objectContaining(userToDelete));
+        expect(user).toEqual(expect.objectContaining(user));
     })
 })

@@ -29,10 +29,11 @@ describe("UserController", () => {
 
     await UserController.createUser(req, res);
 
-    expect(UserService.createUser).toHaveBeenCalledWith(
-      "testName",
-      "testSurname",
-      "test@example.com"
+    expect(UserService.createUser).toHaveBeenCalledWith({
+      name: "testName",
+      surname: "testSurname",
+      email: "test@example.com"
+    }
     );
     expect(res.status).toHaveBeenCalledWith(201);
     expect(res.json).toHaveBeenCalledWith(mockNewUser);
@@ -40,6 +41,9 @@ describe("UserController", () => {
 
   test("Update user", async () => {
     const req = {
+      params: {
+        id: "65d255e0b985568704b8d6b1",
+      },
       body: {
         name: "testName",
         surname: "testSurname",
@@ -51,6 +55,7 @@ describe("UserController", () => {
       json: jest.fn(),
     };
     const mockUpdateUser = {
+      id: "testId",
       name: "testName",
       surname: "testSurname",
       email: "test@example2.com",
@@ -60,9 +65,12 @@ describe("UserController", () => {
     await UserController.updateUser(req, res);
 
     expect(UserService.updateUser).toHaveBeenCalledWith(
-      "testName",
-      "testSurname",
-      "test@example2.com"
+      {
+        id: "testId",
+        name: "testName",
+        surname: "testSurname",
+        email: "test@example2.com",
+      }
     );
     expect(res.status).toHaveBeenCalledWith(204);
     expect(res.json).toHaveBeenCalledWith(mockUpdateUser);
@@ -70,11 +78,7 @@ describe("UserController", () => {
 
   test("Delete user", async () => {
     const req = {
-      body: {
-        name: "testName",
-        surname: "testSurname",
-        email: "test@example2.com",
-      },
+      params: { id: "65d255e0b985568704b8d6b1" },
     };
     const res = {
       status: jest.fn().mockReturnThis(),
@@ -89,9 +93,11 @@ describe("UserController", () => {
     await UserController.deleteUser(req, res);
 
     expect(UserService.deleteUser).toHaveBeenCalledWith(
-      "testName",
-      "testSurname",
-      "test@example2.com"
+      {
+        name: "testName",
+        surname: "testSurname",
+        email: "test@example2.com",
+      }
     );
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith(mockDeleteUser);
