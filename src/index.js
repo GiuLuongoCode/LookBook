@@ -3,6 +3,7 @@ const exepress = require("express");
 const router = exepress.Router();
 const products = require("./routes/productRoutes");
 const users = require("./routes/userRoutes");
+const ordersSwap = require("./routes/orderSwapRoutes");
 const bodyParser =  require("body-parser");
 
 database.connect();
@@ -27,5 +28,7 @@ app.listen(port, () => {
 //register the enpoint
 app.use("/api/v1/products", products);
 app.use("/api/v1/users", users);
+app.use("/api/v1/ordersSwap", ordersSwap);
+
 
 // database.disconnect();
