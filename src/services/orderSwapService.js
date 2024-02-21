@@ -49,7 +49,7 @@ module.exports = class OrderSwapService {
     }
   }
 
-  static async getOrdersByDnc(date) {
+  static async getOrdersByDate(date) {
     try {
       return await OrderSwapModel.find({ createdAt: { $gte: new Date(date) } });
     } catch (error) {
@@ -57,7 +57,7 @@ module.exports = class OrderSwapService {
     }
   }
 
-  static async getOrdersByPasync(productId) {
+  static async getOrdersByProduct(productId) {
     try {
       return await OrderSwapModel.find({
         $or: [{ productOffered: productId }, { productRequested: productId }],
