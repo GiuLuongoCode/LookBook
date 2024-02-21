@@ -38,4 +38,33 @@ module.exports = class OrderSwapController {
       res.status(500).json({ error: error.message });
     }
   }
+
+  static async getAllOrders(req, res) {
+    try {
+      const orders = await OrderSwapService.getAllOrders();
+      res.status(200).json(orders);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  static async getOrdersByDate(req, res) {
+    try {
+      const { date } = req.params;
+      const orders = await OrderSwapService.getOrdersByDate(date);
+      res.status(200).json(orders);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  static async getOrdersByProduct(req, res) {
+    try {
+      const { productId } = req.params;
+      const orders = await OrderSwapService.getOrdersByProduct(productId);
+      res.status(200).json(orders);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
 };

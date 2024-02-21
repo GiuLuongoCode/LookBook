@@ -40,4 +40,30 @@ module.exports = class OrderSwapService {
       throw new Error(error.message);
     }
   }
+
+  static async getAllOrders() {
+    try {
+      return await OrderSwapModel.find();
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  static async getOrdersByDnc(date) {
+    try {
+      return await OrderSwapModel.find({ createdAt: { $gte: new Date(date) } });
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  static async getOrdersByPasync(productId) {
+    try {
+      return await OrderSwapModel.find({
+        $or: [{ productOffered: productId }, { productRequested: productId }],
+      });
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
 };
