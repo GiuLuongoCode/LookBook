@@ -67,4 +67,8 @@ module.exports = class OrderSwapController {
       res.status(500).json({ error: error.message });
     }
   }
+   // TODO: Add getOrdersByStatus
+
+   // TODO: Add getOrdersByUser
+
 };

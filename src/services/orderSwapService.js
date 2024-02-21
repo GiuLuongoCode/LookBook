@@ -66,4 +66,8 @@ module.exports = class OrderSwapService {
       throw new Error(error.message);
     }
   }
+
+  // TODO: Implement getOrdersByStatus
+
+  // TODO: Implement getOrdersByUser
 };

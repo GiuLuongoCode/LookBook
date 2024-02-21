@@ -27,6 +27,8 @@ const SwapOrderSchema = new Schema({
         enum: ['pending', 'completed', 'cancelled'],
         default: 'pending'
     },
+
+    // TODO: Add createdAt
 });
 
 const SwapOrderModel = mongoose.model("SwapOrder", SwapOrderSchema);
