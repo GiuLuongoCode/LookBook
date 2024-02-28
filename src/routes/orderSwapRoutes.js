@@ -8,5 +8,7 @@ router.delete('/:id', OrderSwapController.deleteOrderSwap);
 router.get('/', OrderSwapController.getAllOrders);
 router.get('/date/:date', OrderSwapController.getOrdersByDate);
 router.get('/product/:productId', OrderSwapController.getOrdersByProduct);
+router.get('/status/:status', OrderSwapController.getOrdersByStatus);
+router.get('/user/:userId', OrderSwapController.getOrdersByUser);
 
 module.exports = router;
