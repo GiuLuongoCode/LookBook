@@ -23,28 +23,22 @@ module.exports = class ProductService {
    * @return {Object} A promise that resolves to the response from updating the Product
    */
   static async updateProduct(data) {
-    const response = await Product.findOneAndUpdate(
-      { _id: data._id, name: data.name, photos: data.photos },
-      data,
-      {
-        new: true,
-      }
-    );
+    const response = await Product.findByIdAndUpdate(
+      {_id: data.id},
+                    { $set: data },
+                    { new: true }
+      );
     return response;
   }
 
   /**
-   * Delete a Product with the provided data.
+   * Delete a Product with the provided id.
    *
-   * @param {Object} data - The data to delete the Product with
+   * @param {Object} productId - The id to delete the Product with
    * @return {Promise} A promise that resolves to the response from deleting the Product
    */
-  static async deleteProduct(data) {
-    const deletedProduct = {
-      name: data.name,
-      photos: data.photos,
-    };
-    const response = await Product.findOneAndDelete(deletedProduct);
+  static async deleteProduct(productId) {
+    const response = await Product.findByIdAndDelete(productId);
     return response;
   }
 };

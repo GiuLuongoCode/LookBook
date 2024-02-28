@@ -10,7 +10,7 @@ module.exports = class ProductController {
   static async createProduct(req, res) {
     try {
       const { name, photos } = req.body;
-      const newProduct = await ProductService.createProduct(name, photos);
+      const newProduct = await ProductService.createProduct({name: name, photos: photos});
       return res.status(201).json(newProduct);
     } catch (error) {
       return res.status(500).json({ error: error.message });
@@ -27,7 +27,7 @@ module.exports = class ProductController {
   static async updateProduct(req, res) {
     try {
       const { name, photos } = req.body;
-      const updatedProduct = await ProductService.updateProduct(name, photos);
+      const updatedProduct = await ProductService.updateProduct({id: req.params.id, name: name, photos: photos});
       return res.status(204).json(updatedProduct);
     } catch (error) {
       return res.status(500).json({ error: error.message });
@@ -43,8 +43,8 @@ module.exports = class ProductController {
    */
   static deleteProduct(req, res) {
     try {
-      const { name, photos } = req.body;
-      const deletedProduct = ProductService.deleteProduct(name, photos);
+      const productId = req.params.id;
+      const deletedProduct = ProductService.deleteProduct(productId);
       return res.status(200).json(deletedProduct);
     } catch (error) {
       return res.status(500).json({ error: error.message });
