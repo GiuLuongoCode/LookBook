@@ -28,7 +28,10 @@ const SwapOrderSchema = new Schema({
         default: 'pending'
     },
 
-    // TODO: Add createdAt
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 const SwapOrderModel = mongoose.model("SwapOrder", SwapOrderSchema);
