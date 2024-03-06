@@ -1,5 +1,6 @@
 const OrderSwapModel = require("../models/OrderSwap");
-
+const DEFAULT_PAGE = 1;
+const DEFAULT_PER_PAGE = 10;
 module.exports = class OrderSwapService {
   /**
    * Create an order swap between two users with the offered and requested products.
@@ -64,13 +65,27 @@ module.exports = class OrderSwapService {
   }
 
   /**
-   * Retrieves all orders from the database.
+   * Retrieves all orders from the database with pagination support.
    *
-   * @return {Promise<Array<Order>>} The list of all orders
+   * @param {number} page - The page number.
+   * @param {number} perPage - The number of items per page.
+   * @return {Promise<{totalCount: number, currentPage: number, perPage: number, totalPages: number, data: Array<Order>}>} A promise that resolves to paginated orders.
    */
-  static async getAllOrders() {
+  static async getAllOrders(page = DEFAULT_PAGE, perPage = DEFAULT_PER_PAGE) {
     try {
-      return await OrderSwapModel.find();
+      const totalCount = await OrderSwapModel.countDocuments();
+      const totalPages = Math.ceil(totalCount / perPage);
+      const orders = await OrderSwapModel.find()
+        .skip((page - 1) * perPage)
+        .limit(perPage);
+
+      return {
+        totalCount,
+        currentPage: page,
+        perPage,
+        totalPages,
+        data: orders,
+      };
     } catch (error) {
       throw new Error(error.message);
     }
@@ -134,5 +149,49 @@ module.exports = class OrderSwapService {
     } catch (error) {
       throw new Error(error.message);
     }
+  }
+
+  /**
+   * Retrieves orders based on the provided filters with pagination support.
+   *
+   * @param {Object} options - Object containing filters for product, status, user, and date
+   * @param {number} page - The page number.
+   * @param {number} perPage - The number of items per page.
+   * @return {Promise<{totalCount: number, currentPage: number, perPage: number, totalPages: number, data: Array<Order>}>} A promise that resolves to paginated orders.
+   */
+  static async getOrders({
+    productId,
+    status,
+    userId,
+    date,
+    page = DEFAULT_PAGE,
+    perPage = DEFAULT_PER_PAGE,
+  }) {
+    const promises = [];
+    if (productId) {
+      promises.push(this.getOrdersByProduct(productId));
+    }
+    if (status) {
+      promises.push(this.getOrdersByStatus(status));
+    }
+    if (userId) {
+      promises.push(this.getOrdersByUser(userId));
+    }
+    if (date) {
+      promises.push(this.getOrdersByDate(date));
+    }
+    if (!promises.length) {
+      promises.push(this.getAllOrders(page, perPage));
+    }
+    const results = await Promise.all(promises);
+    const orders = results.flat();
+
+    return {
+      totalCount: orders.length,
+      currentPage: page,
+      perPage,
+      totalPages: Math.ceil(orders.length / perPage),
+      data: orders.slice((page - 1) * perPage, page * perPage),
+    };
   }
 };
