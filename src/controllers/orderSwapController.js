@@ -70,7 +70,6 @@ module.exports = class OrderSwapController {
   static async getOrders(req, res) {
     try {
       const params = req.query;
-      console.log(params);
       const orders = await OrderSwapService.getOrders(params);
       return res.status(200).json(orders);
     } catch (error) {

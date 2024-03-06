@@ -73,19 +73,11 @@ module.exports = class OrderSwapService {
    */
   static async getAllOrders(page = DEFAULT_PAGE, perPage = DEFAULT_PER_PAGE) {
     try {
-      const totalCount = await OrderSwapModel.countDocuments();
-      const totalPages = Math.ceil(totalCount / perPage);
       const orders = await OrderSwapModel.find()
         .skip((page - 1) * perPage)
         .limit(perPage);
 
-      return {
-        totalCount,
-        currentPage: page,
-        perPage,
-        totalPages,
-        data: orders,
-      };
+      return orders;
     } catch (error) {
       throw new Error(error.message);
     }
@@ -97,9 +89,14 @@ module.exports = class OrderSwapService {
    * @param {Date} date - The date to filter the orders.
    * @return {Promise<Array>} A promise that resolves to an array of orders.
    */
-  static async getOrdersByDate(date) {
+  static async getOrdersByDate(date, page = DEFAULT_PAGE, perPage = DEFAULT_PER_PAGE) {
     try {
-      return await OrderSwapModel.find({ createdAt: { $gte: new Date(date) } });
+      const orders = await OrderSwapModel.find({
+        createdAt: { $gte: new Date(date) },
+      })
+        .skip((page - 1) * perPage)
+        .limit(perPage);
+      return orders;
     } catch (error) {
       throw new Error(error.message);
     }
@@ -111,11 +108,14 @@ module.exports = class OrderSwapService {
    * @param {string} productId - The ID of the product
    * @return {Promise<Array>} A promise that resolves to an array of orders
    */
-  static async getOrdersByProduct(productId) {
+  static async getOrdersByProduct(productId, page = DEFAULT_PAGE, perPage = DEFAULT_PER_PAGE) {
     try {
-      return await OrderSwapModel.find({
+      const orders = await OrderSwapModel.find({
         $or: [{ productOffered: productId }, { productRequested: productId }],
-      });
+      })
+      .skip((page - 1) * perPage)
+      .limit(perPage);
+      return orders;
     } catch (error) {
       throw new Error(error.message);
     }
@@ -127,9 +127,12 @@ module.exports = class OrderSwapService {
    * @param {string} status - the status of the orders to retrieve
    * @return {Promise<Array>} an array of orders with the specified status
    */
-  static async getOrdersByStatus(status) {
+  static async getOrdersByStatus(status, page = DEFAULT_PAGE, perPage = DEFAULT_PER_PAGE) {
     try {
-      return await OrderSwapModel.find({ status });
+      const orders = await OrderSwapModel.find({ status })        
+      .skip((page - 1) * perPage)
+      .limit(perPage);
+      return orders;
     } catch (error) {
       throw new Error(error.message);
     }
@@ -141,11 +144,14 @@ module.exports = class OrderSwapService {
    * @param {type} userId - the ID of the user
    * @return {type} an array of orders associated with the user
    */
-  static async getOrdersByUser(userId) {
+  static async getOrdersByUser(userId, page = DEFAULT_PAGE, perPage = DEFAULT_PER_PAGE) {
     try {
-      return await OrderSwapModel.find({
+      const orders = await OrderSwapModel.find({
         $or: [{ userFrom: userId }, { userTo: userId }],
-      });
+      })
+      .skip((page - 1) * perPage)
+      .limit(perPage);
+      return orders;
     } catch (error) {
       throw new Error(error.message);
     }
@@ -167,6 +173,8 @@ module.exports = class OrderSwapService {
     page = DEFAULT_PAGE,
     perPage = DEFAULT_PER_PAGE,
   }) {
+    const totalCount = await OrderSwapModel.countDocuments();
+    const totalPages = Math.ceil(totalCount / perPage);
     const promises = [];
     if (productId) {
       promises.push(this.getOrdersByProduct(productId));
@@ -190,7 +198,7 @@ module.exports = class OrderSwapService {
       totalCount: orders.length,
       currentPage: page,
       perPage,
-      totalPages: Math.ceil(orders.length / perPage),
+      totalPages: totalPages,
       data: orders.slice((page - 1) * perPage, page * perPage),
     };
   }
