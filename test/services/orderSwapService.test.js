@@ -51,4 +51,19 @@ describe("Should perform CRUD on OrderSwapService", () => {
     const OrderSwap = await OrderSwapService.deleteOrderSwap(OrderSwapToDelete);
     expect(OrderSwap).toEqual(expect.objectContaining(OrderSwapToDelete));
   });
+
+  test("Get paginated orders with filters", async () => {
+    const page = 1;
+    const perPage = 1;
+    const filters = { status: "pending" };
+    const paginatedOrders = await OrderSwapService.getOrders({
+      ...filters,
+      page,
+      perPage,
+    });
+
+    expect(paginatedOrders.currentPage).toBe(page);
+    expect(paginatedOrders.perPage).toBe(perPage);
+    expect(paginatedOrders.data.length).toBe(perPage);
+  });
 });

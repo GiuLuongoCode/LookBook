@@ -61,82 +61,17 @@ module.exports = class OrderSwapController {
   }
 
   /**
-   * Get all orders
-   *
-   * @param {Object} req - The request object
-   * @param {Object} res - The response object
-   * @return {Promise} The JSON response with all orders or an error message
-   */
-  static async getAllOrders(req, res) {
-    try {
-      const orders = await OrderSwapService.getAllOrders();
-      return res.status(200).json(orders);
-    } catch (error) {
-      return res.status(500).json({ error: error.message });
-    }
-  }
-
-  /**
-   * Retrieves orders by date.
+   * Gets of orders.
    *
    * @param {Object} req - the request object
    * @param {Object} res - the response object
-   * @return {Promise} The JSON response with all orders or an error message
+   * @return {Promise} JSON response with the orders or error message
    */
-  static async getOrdersByDate(req, res) {
+  static async getOrders(req, res) {
     try {
-      const { date } = req.params;
-      const orders = await OrderSwapService.getOrdersByDate(date);
-      return res.status(200).json(orders);
-    } catch (error) {
-      return res.status(500).json({ error: error.message });
-    }
-  }
-
-  /**
-   * Retrieves orders by product.
-   *
-   * @param {Object} req - The request object
-   * @param {Object} res - The response object
-   * @return {Promise} The JSON response with all orders or an error message
-   */
-  static async getOrdersByProduct(req, res) {
-    try {
-      const { productId } = req.params;
-      const orders = await OrderSwapService.getOrdersByProduct(productId);
-      return res.status(200).json(orders);
-    } catch (error) {
-      return res.status(500).json({ error: error.message });
-    }
-  }
-  /**
-   * Retrieves orders by status.
-   *
-   * @param {Object} req - the request object
-   * @param {Object} res - the response object
-   * @return {Promise} The JSON response with all orders or an error message
-   */
-  static async getOrdersByStatus(req, res) {
-    try {
-      const { status } = req.params;
-      const orders = await OrderSwapService.getOrdersByStatus(status);
-      return res.status(200).json(orders);
-    } catch (error) {
-      return res.status(500).json({ error: error.message });
-    }
-  }
-
-  /**
-   * Retrieves orders for a specific user.
-   *
-   * @param {Object} req - The request object.
-   * @param {Object} res - The response object.
-   * @return {Promise} The JSON response with all orders or an error message
-   */
-  static async getOrdersByUser(req, res) {
-    try {
-      const { userId } = req.params;
-      const orders = await OrderSwapService.getOrdersByUser(userId);
+      const params = req.query;
+      console.log(params);
+      const orders = await OrderSwapService.getOrders(params);
       return res.status(200).json(orders);
     } catch (error) {
       return res.status(500).json({ error: error.message });
